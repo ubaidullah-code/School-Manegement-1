@@ -1,0 +1,28 @@
+.loginForm{
+    display: flex;
+
+    flex-direction: column;
+    width: 50%;
+    gap: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50% );
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
+.questionForm{
+    display: flex;
+
+    flex-direction: column;
+    /* width: 100%; */
+    gap: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50% );
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+}
