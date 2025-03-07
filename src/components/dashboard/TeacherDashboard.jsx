@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { gsap } from 'gsap';
+import ComingSoon from './ComingSoon';
+
 import { 
   Users, BookOpen, Calendar, ClipboardCheck, 
   LogOut, CheckCircle, XCircle, Edit, Search
@@ -225,7 +227,9 @@ const TeacherDashboard = () => {
             <div className="col-span-full text-center py-8 text-gray-500">
               <Calendar className="h-12 w-12 mx-auto mb-3 text-gray-400" />
               <p>No classes assigned yet.</p>
-            </div>
+            {/* <ComingSoon/> */}
+
+             </div>
           )}
         </div>
         

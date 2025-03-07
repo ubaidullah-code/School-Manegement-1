@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { School, User, BookOpen } from 'lucide-react';
 import useAuthStore from '../../store/authStore';
 import LoginScene from '../three/LoginScene';
+import { InputLabel, MenuItem, Select } from '@mui/material';
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -15,6 +16,12 @@ const AuthForm = () => {
   const formRef = useRef(null);
   const titleRef = useRef(null);
   const navigate = useNavigate();
+  const [selectedValue, setSelectedValue] = useState("");
+
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+  
   
   const { signIn, signUp, loading, error: authError } = useAuthStore();
   
@@ -56,7 +63,14 @@ const AuthForm = () => {
         }
         
         const userData = { name };
-        await signUp(email, password, role, userData);
+        await signUp(
+          email,
+          password,
+          role,
+          userData,
+          role === "student" ? selectedValue : null // Only pass class if role is "student"
+        );
+        
         navigate('/dashboard');
       }
     } catch (err) {
@@ -151,28 +165,52 @@ const AuthForm = () => {
             </div>
             
             {!isLogin && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select Role
-                </label>
-                <div className="grid grid-cols-3 gap-3">
-                  {['student', 'teacher', 'admin'].map((roleType) => (
+              <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+              <label className="block text-lg font-semibold text-gray-700 mb-4 text-center">
+                Select Your Role
+              </label>
+            
+              {/* Role Selection Buttons */}
+              <div className="grid grid-cols-3 gap-3">
+                {['student', 'teacher', 'admin'].map((roleType) => (
+                  <React.Fragment key={roleType}>
                     <button
-                      key={roleType}
                       type="button"
                       onClick={() => setRole(roleType)}
-                      className={`flex items-center justify-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none transition-all ${
+                      className={`flex flex-col items-center justify-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none transition-all ${
                         role === roleType
                           ? 'bg-indigo-600 text-white border-indigo-600'
                           : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
                       }`}
                     >
                       {getRoleIcon(roleType)}
-                      <span className="ml-2 capitalize">{roleType}</span>
+                      <span className="mt-1 capitalize">{roleType}</span>
                     </button>
-                  ))}
-                </div>
+                  </React.Fragment>
+                ))}
               </div>
+            
+              {/* Show Class Dropdown Only for Students */}
+              {role === "student" && (
+                <div className="mt-6">
+                  <InputLabel className="text-gray-700 font-medium">Select the Class</InputLabel>
+                  <Select
+                    value={selectedValue}
+                    onChange={handleChange}
+                    label="Select an option"
+                    className="w-full mt-2"
+                  >
+                    {Array.from({ length: 10 }, (_, i) => (
+                      <MenuItem key={i + 1} value={`Class ${i + 1}`}>
+                        Class {i + 1}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </div>
+              )}
+            </div>
+            
+            
             )}
             
             {error && (

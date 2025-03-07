@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const ComingSoon = () => {
   return (
     <div className="w-[calc(100%-18rem)]">
-           <div className="flex items-center justify-center min-h-screen bg-white"  style={{transform: "translate(-50%, -50%)", top: "50%", left: "60%", position:"absolute", }}>
+           <div className="flex items-center justify-center min-h-screen bg-[#F3F4F6]"  style={{transform: "translate(-50%, -50%)", top: "50%", left: "60%", position:"absolute", }}>
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
