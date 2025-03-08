@@ -62,13 +62,13 @@ const AuthForm = () => {
           return;
         }
         
-        const userData = { name };
+        const userData = { name ,  class: role === "student" ? selectedValue : null  };
         await signUp(
           email,
           password,
           role,
           userData,
-          role === "student" ? selectedValue : null // Only pass class if role is "student"
+         
         );
         
         navigate('/dashboard');
@@ -77,7 +77,7 @@ const AuthForm = () => {
       setError(err.message);
     }
   };
-  
+  console.log("selectedValue", selectedValue)
   const toggleForm = () => {
     // Reset form fields
     setEmail('');

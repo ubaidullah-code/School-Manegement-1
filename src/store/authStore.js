@@ -41,7 +41,7 @@ const useAuthStore = create((set) => ({
     return unsubscribe;
   },
 
-  signUp: async (email, password, role, userData) => {
+  signUp: async (email, password, role, userData, ) => {
     set({ loading: true, error: null });
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -52,7 +52,9 @@ const useAuthStore = create((set) => ({
         email,
         role,
         ...userData,
+        
         createdAt: new Date().toISOString()
+        
       });
       
       set({ user, userRole: role, loading: false, error: null });

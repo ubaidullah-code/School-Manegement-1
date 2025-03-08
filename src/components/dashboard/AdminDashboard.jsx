@@ -99,7 +99,39 @@ const AdminDashboard = () => {
     fetchData();
   }, []);
   
- 
+  // console.log("students", students[0].attendance);
+// let attendanceArry = [];
+// students.forEach(studentAttendance =>{
+//   let StuAtten = studentAttendance?.attendance ?? {};
+// attendanceArry.push(StuAtten)
+//   // console.log(StuAtten)
+  
+// })
+// console.log(attendanceArry)
+let presentArr = [];
+let lateArr = [];
+let absentArr = [];
+
+students.forEach(student => {
+  let attendance = student.attendance ?? {}; // ✅ Get the attendance object safely
+
+  Object.entries(attendance).forEach(([date, status]) => {
+    if (status === "present") {
+      presentArr.push(date);
+    } else if (status === "late") {
+      lateArr.push(date);
+    } else if (status === "absent") {
+      absentArr.push(date);
+    }
+  });
+});
+
+console.log("Present Dates:", presentArr.length);
+console.log("Late Dates:", lateArr);
+console.log("Absent Dates:", absentArr);
+
+
+
   let numericResultsArray = [];
 
   students.forEach(student => {
@@ -118,7 +150,7 @@ const AdminDashboard = () => {
       countMap[num] = (countMap[num] || 0) + 1;
   });
   
-  console.log("countMap:", countMap);
+  // console.log("countMap:", countMap);
   // console.log("Type of countMap[0]:",  countMap[1]);  // Will return "number" if key 0 exists
   // console.log("Last numericResult:", numericResultsArray[numericResultsArray.length - 1]);  // Last calculated value
   
@@ -293,7 +325,7 @@ const AdminDashboard = () => {
     labels: ['Present', 'Absent', 'Late'],
     datasets: [
       {
-        data: [85, 10, 5],
+        data: [presentArr.length, absentArr.length, lateArr.length],
         backgroundColor: ['#4CAF50', '#F44336', '#FFC107'],
         borderWidth: 0,
       },
