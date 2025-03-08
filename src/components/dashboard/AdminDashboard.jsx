@@ -10,7 +10,7 @@ import {
 
 import { TextField, Button, Box, Typography } from "@mui/material";
 
-import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
+import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, where, orderBy } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import useAuthStore from '../../store/authStore';
 import StatCard from './StatCard';
@@ -63,7 +63,7 @@ const AdminDashboard = () => {
       try {
         // Fetch all data in parallel
         const [studentsSnapshot, teachersSnapshot, classesSnapshot, quizzesSnapshot] = await Promise.all([
-          getDocs(query(collection(db, "users"), where("role", "==", "student"))),
+          getDocs(query(collection(db, "users"), where("role", "==", "student"), orderBy("class"))),
           getDocs(query(collection(db, "users"), where("role", "==", "teacher"))),
           getDocs(collection(db, "classes")),
           
@@ -99,7 +99,7 @@ const AdminDashboard = () => {
     fetchData();
   }, []);
   
-  // console.log("students", students[0].attendance);
+  console.log("students", students);
 // let attendanceArry = [];
 // students.forEach(studentAttendance =>{
 //   let StuAtten = studentAttendance?.attendance ?? {};
@@ -126,9 +126,9 @@ students.forEach(student => {
   });
 });
 
-console.log("Present Dates:", presentArr.length);
-console.log("Late Dates:", lateArr);
-console.log("Absent Dates:", absentArr);
+// console.log("Present Dates:", presentArr.length);
+// console.log("Late Dates:", lateArr);
+// console.log("Absent Dates:", absentArr);
 
 
 
