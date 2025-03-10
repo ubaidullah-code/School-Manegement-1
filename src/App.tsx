@@ -5,6 +5,9 @@ import AdminDashboard from './components/dashboard/AdminDashboard';
 import TeacherDashboard from './components/dashboard/TeacherDashboard';
 import StudentDashboard from './components/dashboard/StudentDashboard';
 import useAuthStore from './store/authStore';
+import Landing from './components/dashboard/Landing'
+import { Hero } from './components/dashboard/Hero';
+import { Scene } from './components/dashboard/Scene';
 
 function App() {
   const { user, userRole, loading, init } = useAuthStore();
@@ -30,7 +33,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={!user ? <AuthForm /> : <Navigate to="/dashboard" />} />
+        <Route path="/auth" element={!user ? <AuthForm /> : <Navigate to="/dashboard" />} />
+        <Route path='/' element={<Hero/>}/>
         <Route 
           path="/dashboard" 
           element={
@@ -43,11 +47,11 @@ function App() {
                 <StudentDashboard />
               )
             ) : (
-              <Navigate to="/" />
+              <Navigate to="/auth" />
             )
           } 
         />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/auth" />} />
       </Routes>
     </Router>
   );

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Button, TextField, Modal, Box, Typography } from "@mui/material";
+import { Button, TextField, Modal, Box, Typography, Radio, RadioGroup, FormControlLabel } from "@mui/material";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 
 const AddQuestionPage = () => {
     const [questionsList, setQuestionsList] = useState([
-        { question: "", options: ["", "", "", ""], answer: "" },
+        { question: "", options: ["", "", "", ""], correctAnswer: 0 }, // Store index instead of text
     ]);
+    const [handleDescription, setHandleDescription] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
     const db = getFirestore();
     const localData = JSON.parse(localStorage.getItem("quizz"));
@@ -22,37 +23,39 @@ const AddQuestionPage = () => {
         setQuestionsList(updatedQuestions);
     };
 
-    const handleAnswerChange = (index, value) => {
+    const handleAnswerChange = (qIndex, selectedIndex) => {
         const updatedQuestions = [...questionsList];
-        updatedQuestions[index].answer = value;
+        updatedQuestions[qIndex].correctAnswer = selectedIndex; // Store selected option index
         setQuestionsList(updatedQuestions);
     };
 
     const addNewQuestion = () => {
-        setQuestionsList([...questionsList, { question: "", options: ["", "", "", ""], answer: "" }]);
+        setQuestionsList([...questionsList, { question: "", options: ["", "", "", ""], correctAnswer: 0 }]);
     };
 
     const questionAdd = async (e) => {
         e.preventDefault();
-        //quizzes
+
         try {
-            for (const q of questionsList) {
-                await addDoc(collection(db, "quizzes"), {
+            await addDoc(collection(db, "quizzes"), {
+                questions: questionsList.map(q => ({
                     question: q.question,
                     options: q.options,
-                    answer: q.answer,
-                    class: localData?.classCheck,
-                    quizz: localData?.quizzCheck,
-                });
-            }
-            console.log("All questions added successfully!");
+                    correctAnswer: q.correctAnswer, // Store index of correct answer
+                })),
+                class: localData?.classCheck?.toLowerCase() || "",
+                title: localData?.quizzCheck,
+                description: handleDescription,
+                createdAt: new Date().toISOString(),
+            });
+
+            console.log("Quiz added successfully!");
+            setQuestionsList([{ question: "", options: ["", "", "", ""], correctAnswer: 0 }]);
+            setModalOpen(false);
+            localStorage.removeItem("quizz");
         } catch (e) {
             console.error("Error adding document: ", e);
         }
-
-        setQuestionsList([{ question: "", options: ["", "", "", ""], answer: "" }]);
-        setModalOpen(false);
-        localStorage.removeItem("quizz");
     };
 
     return (
@@ -80,6 +83,16 @@ const AddQuestionPage = () => {
                     <Typography variant="h6" sx={{ textAlign: "center", mb: 2 }}>
                         Add Questions
                     </Typography>
+                    
+                    <TextField
+                        fullWidth
+                        label="Description"
+                        type="text"
+                        variant="outlined"
+                        value={handleDescription}
+                        onChange={(e) => setHandleDescription(e.target.value)}
+                        sx={{ mb: 2 }}
+                    />
 
                     <form onSubmit={questionAdd}>
                         {questionsList.map((q, qIndex) => (
@@ -94,28 +107,33 @@ const AddQuestionPage = () => {
                                     sx={{ mb: 2 }}
                                 />
 
-                                {q.options.map((opt, oIndex) => (
-                                    <TextField
-                                        key={oIndex}
-                                        fullWidth
-                                        label={`Option ${oIndex + 1}`}
-                                        type="text"
-                                        variant="outlined"
-                                        value={opt}
-                                        onChange={(e) => handleOptionChange(qIndex, oIndex, e.target.value)}
-                                        sx={{ mb: 1 }}
-                                    />
-                                ))}
+                                <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                                    Select Correct Answer:
+                                </Typography>
 
-                                <TextField
-                                    fullWidth
-                                    label="Answer"
-                                    type="text"
-                                    variant="outlined"
-                                    value={q.answer}
-                                    onChange={(e) => handleAnswerChange(qIndex, e.target.value)}
-                                    sx={{ mb: 2 }}
-                                />
+                                <RadioGroup
+                                    value={q.correctAnswer}
+                                    onChange={(e) => handleAnswerChange(qIndex, parseInt(e.target.value))}
+                                >
+                                    {q.options.map((opt, oIndex) => (
+                                        <Box key={oIndex} sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+                                            <FormControlLabel
+                                                value={oIndex}
+                                                control={<Radio />}
+                                                label={
+                                                    <TextField
+                                                        fullWidth
+                                                        label={`Option ${oIndex + 1}`}
+                                                        type="text"
+                                                        variant="outlined"
+                                                        value={opt}
+                                                        onChange={(e) => handleOptionChange(qIndex, oIndex, e.target.value)}
+                                                    />
+                                                }
+                                            />
+                                        </Box>
+                                    ))}
+                                </RadioGroup>
                             </Box>
                         ))}
 

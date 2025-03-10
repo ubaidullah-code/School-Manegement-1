@@ -54,6 +54,7 @@ const AdminDashboard = () => {
         }
       );
     }
+    (activeTab !== "quizzes")? setTrueCheck(false): setTrueCheck(true)
   }, [activeTab]);
   // const[numericResult1,setNumericResult1]=useState([])
   
@@ -369,7 +370,8 @@ students.forEach(student => {
       // Reset form
       setClassCheck("")
       setQuizzCheck("")
-      localStorage.setItem("quizz", JSON.stringify({classCheck, quizzCheck}))
+      let classOne = classCheck.toLocaleUpperCase
+      localStorage.setItem("quizz", JSON.stringify({classOne, quizzCheck}))
       console.log(classCheck, quizzCheck)
       setTrueCheck(false);
       setErrors({});
@@ -741,7 +743,7 @@ students.forEach(student => {
     <div className="min-h-screen bg-gray-100 ">
      <div className="min-h-screen bg-gray-100 flex">
   {/* Sidebar (Fixed) */}
-  <div className="fixed top-0 left-0 h-full w-64 bg-indigo-800 p-4">
+  <div className="fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-gray-900 to-indigo-900 p-4 ">
     <div className="flex items-center justify-center mb-8">
       <School className="h-8 w-8 text-white mr-2" />
       <h1 className="text-white text-xl font-bold">School Admin</h1>
@@ -753,7 +755,7 @@ students.forEach(student => {
         className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
           activeTab === 'dashboard' 
             ? 'bg-indigo-700 text-white' 
-            : 'text-indigo-100 hover:bg-indigo-700'
+            : 'hover:bg-gradient-to-b from-gray-800 to-indigo-800'
         }`}
       >
         <BarChart2 className="h-5 w-5 mr-3" />
@@ -765,7 +767,7 @@ students.forEach(student => {
         className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
           activeTab === 'students' 
             ? 'bg-indigo-700 text-white' 
-            : 'text-indigo-100 hover:bg-indigo-700'
+            : 'hover:bg-gradient-to-b from-gray-800 to-indigo-800'
         }`}
       >
         <Users className="h-5 w-5 mr-3" />
@@ -777,7 +779,7 @@ students.forEach(student => {
         className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
           activeTab === 'teachers' 
             ? 'bg-indigo-700 text-white' 
-            : 'text-indigo-100 hover:bg-indigo-700'
+            : 'hover:bg-gradient-to-b from-gray-800 to-indigo-800'
         }`}
       >
         <BookOpen className="h-5 w-5 mr-3" />
@@ -789,7 +791,7 @@ students.forEach(student => {
         className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
           activeTab === 'classes' 
             ? 'bg-indigo-700 text-white' 
-            : 'text-indigo-100 hover:bg-indigo-700'
+            : 'hover:bg-gradient-to-b from-gray-800 to-indigo-800'
         }`}
       >
         <Calendar className="h-5 w-5 mr-3" />
@@ -801,7 +803,7 @@ students.forEach(student => {
         className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
           activeTab === 'quizzes' 
             ? 'bg-indigo-700 text-white' 
-            : 'text-indigo-100 hover:bg-indigo-700'
+            : 'hover:bg-gradient-to-b from-gray-800 to-indigo-800'
         }`}
       >
         <ClipboardCheck className="h-5 w-5 mr-3" />
@@ -812,7 +814,7 @@ students.forEach(student => {
     <div className="absolute bottom-4 left-4 right-4">
       <button
         onClick={signOut}
-        className="flex items-center w-full px-4 py-3 text-indigo-100 hover:bg-indigo-700 rounded-lg transition-colors"
+        className="flex items-center w-full px-4 py-3 hover:bg-gradient-to-b from-gray-800 to-indigo-800 rounded-lg transition-colors"
       >
         <LogOut className="h-5 w-5 mr-3" />
         Sign Out
@@ -821,7 +823,7 @@ students.forEach(student => {
   </div>
 
   {/* Main Content (Moves Right) */}
-  <div className="flex-1 ml-64 p-8">
+  <div className="flex-1 ml-64 p-8 ">
     <div className="flex justify-between items-center mb-8">
       <h1 className="text-2xl font-bold text-gray-800">
         {activeTab === 'dashboard' && 'Dashboard Overview'}

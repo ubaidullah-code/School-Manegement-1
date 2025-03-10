@@ -199,95 +199,97 @@ const TeacherDashboard = () => {
   
   const renderClassesTab = () => {
     return (
-      <div className="content-container">
-        <h2 className="text-xl font-semibold mb-6">Your Classes</h2>
+      // <div className="content-container">
+      //   {/* <h2 className="text-xl font-semibold mb-6">Your Classes</h2> */}
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {classes.map((cls) => (
-            <div 
-              key={cls.id}
-              className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
-              onClick={() => setSelectedClass(cls)}
-            >
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium">{cls.name}</h3>
-                <div className="bg-blue-100 p-2 rounded-lg">
-                  <BookOpen className="h-5 w-5 text-blue-600" />
-                </div>
-              </div>
-              <p className="text-gray-600 mb-4">{cls.description}</p>
-              <div className="flex items-center text-sm text-gray-500">
-                <Users className="h-4 w-4 mr-1" />
-                <span>{cls.studentCount || 0} Students</span>
-              </div>
-            </div>
-          ))}
+      //   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      //     {classes.map((cls) => (
+      //       <div 
+      //         key={cls.id}
+      //         className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+      //         onClick={() => setSelectedClass(cls)}
+      //       >
+      //         <div className="flex items-center justify-between mb-4">
+      //           <h3 className="text-lg font-medium">{cls.name}</h3>
+      //           <div className="bg-blue-100 p-2 rounded-lg">
+      //             <BookOpen className="h-5 w-5 text-blue-600" />
+      //           </div>
+      //         </div>
+      //         <p className="text-gray-600 mb-4">{cls.description}</p>
+      //         <div className="flex items-center text-sm text-gray-500">
+      //           <Users className="h-4 w-4 mr-1" />
+      //           <span>{cls.studentCount || 0} Students</span>
+      //         </div>
+      //       </div>
+      //     ))}
           
-          {classes.length === 0 && (
-            <div className="col-span-full text-center py-8 text-gray-500">
-              <Calendar className="h-12 w-12 mx-auto mb-3 text-gray-400" />
-              <p>No classes assigned yet.</p>
-            {/* <ComingSoon/> */}
+      //     {classes.length === 0 && (
+      //       // <div className="col-span-full text-center py-8 text-gray-500">
+      //       <div>
+      //         {/* <Calendar className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+      //         <p>No classes assigned yet.</p> */}
+      //       <ComingSoon/>
 
-             </div>
-          )}
-        </div>
+      //        </div>
+      //     )}
+      //   </div>
         
-        {selectedClass && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-semibold">{selectedClass.name} Details</h2>
-                <button 
-                  onClick={() => setSelectedClass(null)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <XCircle className="h-6 w-6" />
-                </button>
-              </div>
+      //   {selectedClass && (
+      //     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      //       <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
+      //         <div className="flex justify-between items-center mb-4">
+      //           <h2 className="text-xl font-semibold">{selectedClass.name} Details</h2>
+      //           <button 
+      //             onClick={() => setSelectedClass(null)}
+      //             className="text-gray-500 hover:text-gray-700"
+      //           >
+      //             <XCircle className="h-6 w-6" />
+      //           </button>
+      //         </div>
               
-              <div className="mb-4">
-                <h3 className="font-medium mb-2">Description</h3>
-                <p className="text-gray-600">{selectedClass.description}</p>
-              </div>
+      //         <div className="mb-4">
+      //           <h3 className="font-medium mb-2">Description</h3>
+      //           <p className="text-gray-600">{selectedClass.description}</p>
+      //         </div>
               
-              <div className="mb-4">
-                <h3 className="font-medium mb-2">Schedule</h3>
-                <p className="text-gray-600">{selectedClass.schedule || 'No schedule set'}</p>
-              </div>
+      //         <div className="mb-4">
+      //           <h3 className="font-medium mb-2">Schedule</h3>
+      //           <p className="text-gray-600">{selectedClass.schedule || 'No schedule set'}</p>
+      //         </div>
               
-              <div>
-                <h3 className="font-medium mb-2">Students</h3>
-                <div className="max-h-64 overflow-y-auto">
-                  {students.filter(s => s.classId === selectedClass.id).map(student => (
-                    <div key={student.id} className="flex items-center justify-between py-2 border-b">
-                      <span>{student.name}</span>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm text-gray-500">
-                          Attendance: {Object.values(student.attendance || {}).filter(v => v === 'present').length} days
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+      //         <div>
+      //           <h3 className="font-medium mb-2">Students</h3>
+      //           <div className="max-h-64 overflow-y-auto">
+      //             {students.filter(s => s.classId === selectedClass.id).map(student => (
+      //               <div key={student.id} className="flex items-center justify-between py-2 border-b">
+      //                 <span>{student.name}</span>
+      //                 <div className="flex items-center space-x-2">
+      //                   <span className="text-sm text-gray-500">
+      //                     Attendance: {Object.values(student.attendance || {}).filter(v => v === 'present').length} days
+      //                   </span>
+      //                 </div>
+      //               </div>
+      //             ))}
                   
-                  {students.filter(s => s.classId === selectedClass.id).length === 0 && (
-                    <p className="text-gray-500 text-center py-4">No students in this class</p>
-                  )}
-                </div>
-              </div>
+      //             {students.filter(s => s.classId === selectedClass.id).length === 0 && (
+      //               <p className="text-gray-500 text-center py-4">No students in this class</p>
+      //             )}
+      //           </div>
+      //         </div>
               
-              <div className="flex justify-end mt-6">
-                <button
-                  onClick={() => setSelectedClass(null)}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+      //         <div className="flex justify-end mt-6">
+      //           <button
+      //             onClick={() => setSelectedClass(null)}
+      //             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+      //           >
+      //             Close
+      //           </button>
+      //         </div>
+      //       </div>
+      //     </div>
+      //   )}
+      // </div>
+      <ComingSoon/>
     );
   };
   
@@ -420,7 +422,7 @@ const TeacherDashboard = () => {
           <h2 className="text-xl font-semibold">Quizzes</h2>
           <button
             onClick={() => setShowQuizModal(true)}
-            className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center px-4 py-2 bg-[#c31432] text-white rounded-lg hover:bg-red-700 transition-colors"
           >
             <ClipboardCheck className="h-5 w-5 mr-2" />
             Create Quiz
@@ -433,7 +435,7 @@ const TeacherDashboard = () => {
               key={quiz.id}
               className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow"
             >
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-3">
                 <h3 className="text-lg font-medium">{quiz.title}</h3>
                 <div className="bg-purple-100 p-2 rounded-lg">
                   <ClipboardCheck className="h-5 w-5 text-purple-600" />
@@ -461,7 +463,7 @@ const TeacherDashboard = () => {
         
         {/* Create Quiz Modal */}
         {showQuizModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="absolute top-12 inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-semibold">Create New Quiz</h2>
@@ -499,7 +501,7 @@ const TeacherDashboard = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">Class</label>
                   <select
                     value={quizData.class}
-                    onChange={(e) => setQuizData({ ...quizData, class: e.target.value })}
+                    onChange={(e) => setQuizData({ ...quizData, class: e.target.value.toLowerCase() })}
                     className="w-full px-3 py-2 border rounded-md"
                   >
                     <option value="All Classes">All Classes</option>
@@ -609,97 +611,18 @@ const TeacherDashboard = () => {
       case 'quizzes':
         return renderQuizzesTab();
       default:
-        return <div>Select a tab</div>;
+        return <div>
+          {/* <CommingSoon/> */}
+        </div>;
     }
   };
   
   return (
-    // <div className="min-h-screen bg-gray-100">
-    //   <div className="flex">
-    //     {/* Sidebar */}
-    //     <div className="w-64 bg-green-800 min-h-screen p-4">
-    //       <div className="flex items-center justify-center mb-8">
-    //         <BookOpen className="h-8 w-8 text-white mr-2" />
-    //         <h1 className="text-white text-xl font-bold">Teacher Portal</h1>
-    //       </div>
-          
-    //       <nav className="space-y-2">
-    //         <button
-    //           onClick={() => setActiveTab('classes')}
-    //           className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
-    //             activeTab === 'classes' 
-    //               ? 'bg-green-700 text-white' 
-    //               : 'text-green-100 hover:bg-green-700'
-    //           }`}
-    //         >
-    //           <Calendar className="h-5 w-5 mr-3" />
-    //           My Classes
-    //         </button>
-            
-    //         <button
-    //           onClick={() => setActiveTab('attendance')}
-    //           className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
-    //             activeTab === 'attendance' 
-    //               ? 'bg-green-700 text-white' 
-    //               : 'text-green-100 hover:bg-green-700'
-    //           }`}
-    //         >
-    //           <CheckCircle className="h-5 w-5 mr-3" />
-    //           Attendance
-    //         </button>
-            
-    //         <button
-    //           onClick={() => setActiveTab('quizzes')}
-    //           className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
-    //             activeTab === 'quizzes' 
-    //               ? 'bg-green-700 text-white' 
-    //               : 'text-green-100 hover:bg-green-700'
-    //           }`}
-    //         >
-    //           <ClipboardCheck className="h-5 w-5 mr-3" />
-    //           Quizzes
-    //         </button>
-    //       </nav>
-          
-    //       <div className="absolute bottom-4 left-4 right-4">
-    //         <button
-    //           onClick={signOut}
-    //           className="flex items-center w-full px-4 py-3 text-green-100 hover:bg-green-700 rounded-lg transition-colors"
-    //         >
-    //           <LogOut className="h-5 w-5 mr-3" />
-    //           Sign Out
-    //         </button>
-    //       </div>
-    //     </div>
-        
-    //     {/* Main content */}
-    //     <div className="flex-1 p-8">
-    //       <div className="flex justify-between items-center mb-8">
-    //         <h1 className="text-2xl font-bold text-gray-800">
-    //           {activeTab === 'classes' && 'My Classes'}
-    //           {activeTab === 'attendance' && 'Mark Attendance'}
-    //           {activeTab === 'quizzes' && 'Manage Quizzes'}
-    //         </h1>
-            
-    //         <div className="flex items-center">
-    //           <div className="mr-4 text-right">
-    //             <p className="text-sm text-gray-600">Welcome,</p>
-    //             <p className="text-sm font-medium">{user?.email}</p>
-    //           </div>
-    //           <div className="h-10 w-10 rounded-full bg-green-600 flex items-center justify-center text-white font-medium">
-    //             {user?.email?.charAt(0).toUpperCase() || 'T'}
-    //           </div>
-    //         </div>
-    //       </div>
-          
-    //       {renderContent()}
-    //     </div>
-    //   </div>
-    // </div>
+    
     <div className="min-h-screen bg-gray-100 pl-64"> {/* Add padding-left to avoid content overlap */}
   <div className="flex">
     {/* Sidebar */}
-    <div className="fixed top-0 left-0 w-64 bg-green-800 h-full p-4">
+    <div className="fixed top-0 left-0 w-64 bg-[#c31432] h-full p-4">
       <div className="flex items-center justify-center mb-8">
         <BookOpen className="h-8 w-8 text-white mr-2" />
         <h1 className="text-white text-xl font-bold">Teacher Portal</h1>
@@ -710,8 +633,8 @@ const TeacherDashboard = () => {
           onClick={() => setActiveTab('classes')}
           className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
             activeTab === 'classes' 
-              ? 'bg-green-700 text-white' 
-              : 'text-green-100 hover:bg-green-700'
+              ? 'bg-red-700 text-white' 
+              : 'text-red-100 hover:bg-red-700'
           }`}
         >
           <Calendar className="h-5 w-5 mr-3" />
@@ -722,8 +645,8 @@ const TeacherDashboard = () => {
           onClick={() => setActiveTab('attendance')}
           className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
             activeTab === 'attendance' 
-              ? 'bg-green-700 text-white' 
-              : 'text-green-100 hover:bg-green-700'
+              ? 'bg-red-700 text-white' 
+              : 'text-red-100 hover:bg-red-700'
           }`}
         >
           <CheckCircle className="h-5 w-5 mr-3" />
@@ -734,8 +657,8 @@ const TeacherDashboard = () => {
           onClick={() => setActiveTab('quizzes')}
           className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
             activeTab === 'quizzes' 
-              ? 'bg-green-700 text-white' 
-              : 'text-green-100 hover:bg-green-700'
+              ? 'bg-red-700 text-white' 
+              : 'text-red-100 hover:bg-red-700'
           }`}
         >
           <ClipboardCheck className="h-5 w-5 mr-3" />
@@ -746,7 +669,7 @@ const TeacherDashboard = () => {
       <div className="absolute bottom-4 left-4 right-4">
         <button
           onClick={signOut}
-          className="flex items-center w-full px-4 py-3 text-green-100 hover:bg-green-700 rounded-lg transition-colors"
+          className="flex items-center w-full px-4 py-3 text-red-100 hover:bg-red-700 rounded-lg transition-colors"
         >
           <LogOut className="h-5 w-5 mr-3" />
           Sign Out
@@ -768,7 +691,7 @@ const TeacherDashboard = () => {
             <p className="text-sm text-gray-600">Welcome,</p>
             <p className="text-sm font-medium">{user?.email}</p>
           </div>
-          <div className="h-10 w-10 rounded-full bg-green-600 flex items-center justify-center text-white font-medium">
+          <div className="h-10 w-10 rounded-full bg-red-600 flex items-center justify-center text-white font-medium">
             {user?.email?.charAt(0).toUpperCase() || 'T'}
           </div>
         </div>

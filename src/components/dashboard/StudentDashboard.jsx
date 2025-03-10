@@ -50,7 +50,7 @@ const StudentDashboard = () => {
             ...studentDoc.docs[0].data()
           };
           setStudentData(student);
-          
+          // console.log("students", studentData.class)
           // Get class data if student has a class
           if (student.classId) {
             const classDoc = await getDoc(doc(db, 'classes', student.classId));
@@ -65,7 +65,7 @@ const StudentDashboard = () => {
           // Get quizzes for this student's class
           const quizzesSnapshot = await getDocs(query(
             collection(db, 'quizzes'),
-            where('class', 'in', [student.classId, ''])
+            where('class', 'in', [studentData.class.toLowerCase(), ''])
           ));
           
           const quizzesData = quizzesSnapshot.docs.map(doc => ({
@@ -80,8 +80,10 @@ const StudentDashboard = () => {
     };
     
     fetchStudentData();
-  }, [user]);
-  
+  }, [user,studentData, selectedQuiz]);
+  console.log("quizzes", quizzes)
+  console.log("selectedQuiz", selectedQuiz)
+
   const handleStartQuiz = (quiz) => {
     setSelectedQuiz(quiz);
     setQuizAnswers({});
@@ -269,7 +271,7 @@ const StudentDashboard = () => {
                       setSelectedQuiz(null);
                       setQuizResults({});
                     }}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-[#17b3a1]"
                   >
                     Back to Quizzes
                   </button>
@@ -291,7 +293,7 @@ const StudentDashboard = () => {
                             className={`p-2 rounded-md cursor-pointer ${
                               quizAnswers[qIndex] === oIndex
                                 ? 'bg-blue-100 border border-blue-300'
-                                : 'bg-gray-50 hover:bg-gray-100'
+                                : 'bg-gray-50 hover:bg-[#17b3a1]'
                             }`}
                           >
                             {option}
@@ -305,13 +307,13 @@ const StudentDashboard = () => {
                 <div className="flex justify-between">
                   <button
                     onClick={() => setSelectedQuiz(null)}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-[#17b3a1]"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleSubmitQuiz}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-[#17b3a1]"
                     disabled={Object.keys(quizAnswers).length !== selectedQuiz.questions.length}
                   >
                     Submit Quiz
@@ -322,10 +324,14 @@ const StudentDashboard = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {quizzes.map((quiz) => (
+            
+            {quizzes.map((quiz) => 
+            
+            (
+
               <div 
                 key={quiz.id}
-                className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+                className="bg-white rounded-xl shadow-md p-6 hover:bg-[#17b3a1]-shadow cursor-pointer"
                 onClick={() => handleStartQuiz(quiz)}
               >
                 <div className="flex items-center justify-between mb-4">
@@ -420,7 +426,7 @@ const StudentDashboard = () => {
                   const status = attendance[day];
                   
                   return (
-                    <tr key={day} className="hover:bg-gray-50">
+                    <tr key={day} className="hover:bg-[#17b3a1]">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">
                           {new Date(day).toLocaleDateString('en-US', {
@@ -641,7 +647,7 @@ const StudentDashboard = () => {
     <div className="min-h-screen bg-gray-100 pl-64">
   <div className="flex">
     {/* Sidebar */}
-    <div className="fixed top-0 left-0 w-64 bg-green-800 h-full p-4">
+    <div className="fixed top-0 left-0 w-64 bg-[#11998e] h-full p-4">
       <div className="flex items-center justify-center mb-8">
         <BookOpenCheck className="h-8 w-8 text-white mr-2" />
         <h1 className="text-white text-xl font-bold">Student Portal</h1>
@@ -652,8 +658,8 @@ const StudentDashboard = () => {
           onClick={() => setActiveTab('schedule')}
           className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
             activeTab === 'schedule' 
-              ? 'bg-green-700 text-white' 
-              : 'text-blue-100 hover:bg-green-700'
+              ? 'bg-[#17b3a1] text-white' 
+              : 'text-blue-100 hover:bg-[#17b3a1]'
           }`}
         >
           <Calendar className="h-5 w-5 mr-3" />
@@ -664,8 +670,8 @@ const StudentDashboard = () => {
           onClick={() => setActiveTab('quizzes')}
           className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
             activeTab === 'quizzes' 
-              ? 'bg-green-700 text-white' 
-              : 'text-blue-100 hover:bg-green-700'
+              ? 'bg-[#17b3a1] text-white' 
+              : 'text-blue-100 hover:bg-[#17b3a1]'
           }`}
         >
           <ClipboardCheck className="h-5 w-5 mr-3" />
@@ -676,31 +682,31 @@ const StudentDashboard = () => {
           onClick={() => setActiveTab('attendance')}
           className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
             activeTab === 'attendance' 
-              ? 'bg-green-700 text-white' 
-              : 'text-blue-100 hover:bg-green-700'
+              ? 'bg-[#17b3a1] text-white' 
+              : 'text-blue-100 hover:bg-[#17b3a1]'
           }`}
         >
           <CheckCircle className="h-5 w-5 mr-3" />
           Attendance
         </button>
 
-        <button
+        {/* <button
           onClick={() => setActiveTab('performance')}
           className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
             activeTab === 'performance' 
               ? 'bg-blue-700 text-white' 
-              : 'text-blue-100 hover:bg-blue-700'
+              : 'text-blue-100 hover:bg-[#17b3a1]'
           }`}
         >
           <BarChart2 className="h-5 w-5 mr-3" />
           Performance
-        </button>
+        </button> */}
       </nav>
 
       <div className="absolute bottom-4 left-4 right-4">
         <button
           onClick={signOut}
-          className="flex items-center w-full px-4 py-3 text-blue-100 hover:bg-green-700 rounded-lg transition-colors"
+          className="flex items-center w-full px-4 py-3 text-blue-100 hover:bg-[#17b3a1] rounded-lg transition-colors"
         >
           <LogOut className="h-5 w-5 mr-3" />
           Sign Out
@@ -723,7 +729,7 @@ const StudentDashboard = () => {
             <p className="text-sm text-gray-600">Welcome,</p>
             <p className="text-sm font-medium">{studentData?.name || user?.email}</p>
           </div>
-          <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium">
+          <div className="h-10 w-10 rounded-full bg-[#17b3a1] flex items-center justify-center text-white font-medium">
             {studentData?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'S'}
           </div>
         </div>
