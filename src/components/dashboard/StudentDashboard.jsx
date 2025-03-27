@@ -20,6 +20,24 @@ const StudentDashboard = () => {
   
   const contentRef = useRef(null);
   const { user, signOut } = useAuthStore();
+
+  // Calculate attendance statistics
+  const calculateAttendanceStats = () => {
+    const attendance = studentData?.attendance || {};
+    const attendanceDays = Object.keys(attendance).sort();
+    const totalDays = attendanceDays.length || 1; // Avoid division by zero
+    const presentDays = attendanceDays.filter(day => attendance[day] === 'present').length;
+    const lateDays = attendanceDays.filter(day => attendance[day] === 'late').length;
+    const absentDays = attendanceDays.filter(day => attendance[day] === 'absent').length;
+    
+    return {
+      totalDays,
+      presentDays,
+      lateDays,
+      absentDays,
+      attendancePercentage: Math.round((presentDays / totalDays) * 100)
+    };
+  };
   
   // GSAP animations
   useEffect(() => {
@@ -50,8 +68,7 @@ const StudentDashboard = () => {
             ...studentDoc.docs[0].data()
           };
           setStudentData(student);
-          // console.log("students", studentData.class)
-          // Get class data if student has a class
+          
           if (student.classId) {
             const classDoc = await getDoc(doc(db, 'classes', student.classId));
             if (classDoc.exists()) {
@@ -62,7 +79,6 @@ const StudentDashboard = () => {
             }
           }
           
-          // Get quizzes for this student's class
           const quizzesSnapshot = await getDocs(query(
             collection(db, 'quizzes'),
             where('class', 'in', [studentData.class.toLowerCase(), ''])
@@ -80,9 +96,7 @@ const StudentDashboard = () => {
     };
     
     fetchStudentData();
-  }, [user,studentData, selectedQuiz]);
-  console.log("quizzes", quizzes)
-  console.log("selectedQuiz", selectedQuiz)
+  }, [user, studentData, selectedQuiz]);
 
   const handleStartQuiz = (quiz) => {
     setSelectedQuiz(quiz);
@@ -149,7 +163,6 @@ const StudentDashboard = () => {
             {subjects.map((subject, index) => (
               <div key={index} className="grid grid-cols-5">
                 {weekdays.map((day, dayIndex) => {
-                  // Randomly distribute subjects across the week
                   const hasClass = (index + dayIndex) % 3 === 0;
                   
                   return (
@@ -324,11 +337,7 @@ const StudentDashboard = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            
-            {quizzes.map((quiz) => 
-            
-            (
-
+            {quizzes.map((quiz) => (
               <div 
                 key={quiz.id}
                 className="bg-white rounded-xl shadow-md p-6 hover:bg-[#17b3a1]-shadow cursor-pointer"
@@ -365,16 +374,9 @@ const StudentDashboard = () => {
   };
   
   const renderAttendanceTab = () => {
+    const { totalDays, presentDays, lateDays, absentDays, attendancePercentage } = calculateAttendanceStats();
     const attendance = studentData?.attendance || {};
     const attendanceDays = Object.keys(attendance).sort();
-    
-    // Calculate attendance statistics
-    const totalDays = attendanceDays.length || 1; // Avoid division by zero
-    const presentDays = attendanceDays.filter(day => attendance[day] === 'present').length;
-    const lateDays = attendanceDays.filter(day => attendance[day] === 'late').length;
-    const absentDays = attendanceDays.filter(day => attendance[day] === 'absent').length;
-    
-    const attendancePercentage = Math.round((presentDays / totalDays) * 100);
     
     return (
       <div className="content-container">
@@ -466,6 +468,8 @@ const StudentDashboard = () => {
   };
   
   const renderPerformanceTab = () => {
+    const { attendancePercentage } = calculateAttendanceStats();
+    
     // Sample performance data
     const subjects = [
       { name: 'Mathematics', score: 85, grade: 'A' },
@@ -645,101 +649,100 @@ const StudentDashboard = () => {
   
   return (
     <div className="min-h-screen bg-gray-100 pl-64">
-  <div className="flex">
-    {/* Sidebar */}
-    <div className="fixed top-0 left-0 w-64 bg-[#11998e] h-full p-4">
-      <div className="flex items-center justify-center mb-8">
-        <BookOpenCheck className="h-8 w-8 text-white mr-2" />
-        <h1 className="text-white text-xl font-bold">Student Portal</h1>
-      </div>
-
-      <nav className="space-y-2">
-        <button
-          onClick={() => setActiveTab('schedule')}
-          className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
-            activeTab === 'schedule' 
-              ? 'bg-[#17b3a1] text-white' 
-              : 'text-blue-100 hover:bg-[#17b3a1]'
-          }`}
-        >
-          <Calendar className="h-5 w-5 mr-3" />
-          Class Schedule
-        </button>
-
-        <button
-          onClick={() => setActiveTab('quizzes')}
-          className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
-            activeTab === 'quizzes' 
-              ? 'bg-[#17b3a1] text-white' 
-              : 'text-blue-100 hover:bg-[#17b3a1]'
-          }`}
-        >
-          <ClipboardCheck className="h-5 w-5 mr-3" />
-          Quizzes
-        </button>
-
-        <button
-          onClick={() => setActiveTab('attendance')}
-          className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
-            activeTab === 'attendance' 
-              ? 'bg-[#17b3a1] text-white' 
-              : 'text-blue-100 hover:bg-[#17b3a1]'
-          }`}
-        >
-          <CheckCircle className="h-5 w-5 mr-3" />
-          Attendance
-        </button>
-
-        {/* <button
-          onClick={() => setActiveTab('performance')}
-          className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
-            activeTab === 'performance' 
-              ? 'bg-blue-700 text-white' 
-              : 'text-blue-100 hover:bg-[#17b3a1]'
-          }`}
-        >
-          <BarChart2 className="h-5 w-5 mr-3" />
-          Performance
-        </button> */}
-      </nav>
-
-      <div className="absolute bottom-4 left-4 right-4">
-        <button
-          onClick={signOut}
-          className="flex items-center w-full px-4 py-3 text-blue-100 hover:bg-[#17b3a1] rounded-lg transition-colors"
-        >
-          <LogOut className="h-5 w-5 mr-3" />
-          Sign Out
-        </button>
-      </div>
-    </div>
-
-    {/* Main content */}
-    <div className="flex-1 p-8 overflow-auto h-screen" ref={contentRef}>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold text-gray-800">
-          {activeTab === 'schedule' && 'Class Schedule'}
-          {activeTab === 'quizzes' && 'Take Quizzes'}
-          {activeTab === 'attendance' && 'Attendance Record'}
-          {activeTab === 'performance' && 'Performance Report'}
-        </h1>
-
-        <div className="flex items-center">
-          <div className="mr-4 text-right">
-            <p className="text-sm text-gray-600">Welcome,</p>
-            <p className="text-sm font-medium">{studentData?.name || user?.email}</p>
+      <div className="flex">
+        {/* Sidebar */}
+        <div className="fixed top-0 left-0 w-64 bg-[#11998e] h-full p-4">
+          <div className="flex items-center justify-center mb-8">
+            <BookOpenCheck className="h-8 w-8 text-white mr-2" />
+            <h1 className="text-white text-xl font-bold">Student Portal</h1>
           </div>
-          <div className="h-10 w-10 rounded-full bg-[#17b3a1] flex items-center justify-center text-white font-medium">
-            {studentData?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'S'}
+
+          <nav className="space-y-2">
+            <button
+              onClick={() => setActiveTab('schedule')}
+              className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
+                activeTab === 'schedule' 
+                  ? 'bg-[#17b3a1] text-white' 
+                  : 'text-blue-100 hover:bg-[#17b3a1]'
+              }`}
+            >
+              <Calendar className="h-5 w-5 mr-3" />
+              Class Schedule
+            </button>
+
+            <button
+              onClick={() => setActiveTab('quizzes')}
+              className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
+                activeTab === 'quizzes' 
+                  ? 'bg-[#17b3a1] text-white' 
+                  : 'text-blue-100 hover:bg-[#17b3a1]'
+              }`}
+            >
+              <ClipboardCheck className="h-5 w-5 mr-3" />
+              Quizzes
+            </button>
+
+            <button
+              onClick={() => setActiveTab('attendance')}
+              className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
+                activeTab === 'attendance' 
+                  ? 'bg-[#17b3a1] text-white' 
+                  : 'text-blue-100 hover:bg-[#17b3a1]'
+              }`}
+            >
+              <CheckCircle className="h-5 w-5 mr-3" />
+              Attendance
+            </button>
+
+            <button
+              onClick={() => setActiveTab('performance')}
+              className={`flex items-center w-full px-4 py-3 rounded-lg transition-colors ${
+                activeTab === 'performance' 
+                  ? 'bg-[#17b3a1] text-white' 
+                  : 'text-blue-100 hover:bg-[#17b3a1]'
+              }`}
+            >
+              <BarChart2 className="h-5 w-5 mr-3" />
+              Performance
+            </button>
+          </nav>
+
+          <div className="absolute bottom-4 left-4 right-4">
+            <button
+              onClick={signOut}
+              className="flex items-center w-full px-4 py-3 text-blue-100 hover:bg-[#17b3a1] rounded-lg transition-colors"
+            >
+              <LogOut className="h-5 w-5 mr-3" />
+              Sign Out
+            </button>
           </div>
         </div>
+
+        {/* Main content */}
+        <div className="flex-1 p-8 overflow-auto h-screen" ref={contentRef}>
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-2xl font-bold text-gray-800">
+              {activeTab === 'schedule' && 'Class Schedule'}
+              {activeTab === 'quizzes' && 'Take Quizzes'}
+              {activeTab === 'attendance' && 'Attendance Record'}
+              {activeTab === 'performance' && 'Performance Report'}
+            </h1>
+
+            <div className="flex items-center">
+              <div className="mr-4 text-right">
+                <p className="text-sm text-gray-600">Welcome,</p>
+                <p className="text-sm font-medium">{studentData?.name || user?.email}</p>
+              </div>
+              <div className="h-10 w-10 rounded-full bg-[#17b3a1] flex items-center justify-center text-white font-medium">
+                {studentData?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'S'}
+              </div>
+            </div>
+          </div>
+
+          {renderContent()}
+        </div>
       </div>
-
-      {renderContent()}
     </div>
-  </div>
-</div>
-
   );
 };
 
