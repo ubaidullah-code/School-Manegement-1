@@ -5,7 +5,7 @@ import {
   LogOut, CheckCircle, Clock, Award,
   User, BookOpenCheck, BarChart2
 } from 'lucide-react';
-import { collection, getDocs, query, where, doc, getDoc } from 'firebase/firestore';
+import { collection, getDocs, query, where, doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import useAuthStore from '../../store/authStore';
 
@@ -17,10 +17,11 @@ const StudentDashboard = () => {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizResults, setQuizResults] = useState({});
+
   
   const contentRef = useRef(null);
   const { user, signOut } = useAuthStore();
-
+// console.log("q", studentData.quizResults.quizzDate)
   // Calculate attendance statistics
   const calculateAttendanceStats = () => {
     const attendance = studentData?.attendance || {};
@@ -109,34 +110,78 @@ const StudentDashboard = () => {
       [questionIndex]: optionIndex
     });
   };
-  
-  const handleSubmitQuiz = () => {
+  const handleSubmitQuiz = async () => {
     const results = {
       totalQuestions: selectedQuiz.questions.length,
       correctAnswers: 0,
       score: 0,
-      answers: {}
+      answers: {},
+      quizName: selectedQuiz?.title,
     };
+    const quizzDateCheck = {
+      quizzDate: selectedQuiz?.createdAt, // Store quiz creation date
+
+    }
     
+  
     selectedQuiz.questions.forEach((question, index) => {
       const userAnswer = quizAnswers[index];
       const isCorrect = userAnswer === question.correctAnswer;
-      
+  
       results.answers[index] = {
         userAnswer,
         correctAnswer: question.correctAnswer,
-        isCorrect
+        isCorrect,
       };
-      
+  
       if (isCorrect) {
         results.correctAnswers += 1;
       }
     });
-    
+  
     results.score = Math.round((results.correctAnswers / results.totalQuestions) * 100);
-    
+  
+    // Update Firestore before setting the state
+    await updateQuizResult(results.score, results.quizName, quizzDateCheck.quizzDate);
+  
     setQuizResults(results);
   };
+  
+  const updateQuizResult = async (score, quizName, quizzDate) => {
+    try {
+      const studentRef = doc(db, 'users', studentData?.id);
+  
+      // Get today's date
+      const todayDate = new Date().toISOString();
+  
+      let updateData = {
+        quizResults: arrayUnion({
+          score,
+          quizName,
+          date: todayDate,  // When the student took the quiz
+          lastAttemptDate: todayDate, // Store today's date separately
+        }),
+        quizzDate: arrayUnion(...[quizzDate]) // ✅ Correct
+ // ✅ Correct
+, // ✅ Store the quiz creation date inside quizResults
+      };
+  
+      // Store `quizzDate` separately as well (only if it's defined)
+      
+  
+      // Update Firestore
+      await updateDoc(studentRef, updateData);
+  
+      console.log('Quiz results, quiz date, and attempt date updated successfully');
+    } catch (error) {
+      console.error('Error updating quiz results:', error);
+    }
+  };
+  
+  
+  
+  
+  
   
   const renderScheduleTab = () => {
     const weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -337,29 +382,39 @@ const StudentDashboard = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {quizzes.map((quiz) => (
-              <div 
-                key={quiz.id}
-                className="bg-white rounded-xl shadow-md p-6 hover:bg-[#17b3a1]-shadow cursor-pointer"
-                onClick={() => handleStartQuiz(quiz)}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium">{quiz.title}</h3>
-                  <div className="bg-purple-100 p-2 rounded-lg">
-                    <ClipboardCheck className="h-5 w-5 text-purple-600" />
-                  </div>
-                </div>
-                <p className="text-gray-600 mb-4">{quiz.description}</p>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-gray-500">
-                    {quiz.questions?.length || 0} Questions
-                  </span>
-                  <span className="bg-blue-100 px-2 py-1 rounded-full text-blue-800">
-                    Take Quiz
-                  </span>
-                </div>
-              </div>
-            ))}
+            
+            {console.log("stud", studentData.quizzDate)}
+            {quizzes.map((quiz, id) => {
+  const isDisabled = studentData?.quizzDate?.includes(quiz?.createdAt);
+
+  return (
+    <div 
+      key={quiz.id || id} 
+      className={`bg-white rounded-xl shadow-md p-6 cursor-pointer transition duration-300 
+        ${isDisabled ? "opacity-50 cursor-not-allowed" : "hover:shadow-lg "}`}
+      onClick={!isDisabled ? () => handleStartQuiz(quiz) : undefined}
+    >
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-medium">{quiz.title}</h3>
+        <div className="bg-purple-100 p-2 rounded-lg">
+          <ClipboardCheck className="h-5 w-5 text-purple-600" />
+        </div>
+      </div>
+      <p className="text-gray-600 mb-4">{quiz.description}</p>
+      <div className="flex items-center justify-between text-sm">
+        <span className="text-gray-500">
+          {quiz.questions?.length || 0} Questions
+        </span>
+        {!isDisabled && (
+          <span className="bg-blue-100 px-2 py-1 rounded-full text-blue-800">
+            Take Quiz
+          </span>
+        )}
+      </div>
+    </div>
+  );
+})}
+
             
             {quizzes.length === 0 && (
               <div className="col-span-full text-center py-8 text-gray-500">
@@ -479,12 +534,12 @@ const StudentDashboard = () => {
       { name: 'Geography', score: 75, grade: 'B' }
     ];
     
-    const quizScores = [
-      { name: 'Math Quiz 1', score: 90 },
-      { name: 'Science Mid-term', score: 85 },
-      { name: 'English Vocabulary', score: 75 },
-      { name: 'History Test', score: 82 }
-    ];
+    // const quizScores = [
+    //   { name: 'Math Quiz 1', score: 90 },
+    //   { name: 'Science Mid-term', score: 85 },
+    //   { name: 'English Vocabulary', score: 75 },
+    //   { name: 'History Test', score: 82 }
+    // ];
     
     return (
       <div className="content-container">
@@ -535,13 +590,14 @@ const StudentDashboard = () => {
             <h3 className="text-lg font-medium mb-4">Recent Quiz Results</h3>
             
             <div className="space-y-4">
-              {quizScores.map((quiz) => (
-                <div key={quiz.name} className="flex items-center p-3 border rounded-md">
+              {console.log("quizzResults", studentData.quizResults)}
+              {studentData?.quizResults?.map((quiz) => (
+                <div key={quiz.quizzName} className="flex items-center p-3 border rounded-md">
                   <div className="bg-purple-100 p-2 rounded-lg mr-4">
                     <ClipboardCheck className="h-5 w-5 text-purple-600" />
                   </div>
                   <div className="flex-1">
-                    <p className="font-medium">{quiz.name}</p>
+                    <p className="font-medium">{quiz.quizName}  ({quiz.lastAttemptDate.split('T')[0]}) </p>
                     <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
                       <div 
                         className={`h-2 rounded-full ${

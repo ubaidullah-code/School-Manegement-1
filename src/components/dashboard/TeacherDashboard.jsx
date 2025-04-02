@@ -187,7 +187,7 @@ const TeacherDashboard = () => {
       setQuizzes([...quizzes, { id: quizRef.id, ...newQuiz }]);
       setShowQuizModal(false);
       setQuizData({
-        title: '',
+        teacherName: '',
         description: '',
         class: '',
         questions: [{ question: '', options: ['', '', '', ''], correctAnswer: 0 }]
@@ -477,7 +477,7 @@ const TeacherDashboard = () => {
               
               <form onSubmit={handleCreateQuiz}>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Quiz Title</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Teacher Name</label>
                   <input
                     type="text"
                     value={quizData.title}
@@ -488,7 +488,7 @@ const TeacherDashboard = () => {
                 </div>
                 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Description (Which kind of quiz do you create ?)</label>
                   <textarea
                     value={quizData.description}
                     onChange={(e) => setQuizData({ ...quizData, description: e.target.value })}
