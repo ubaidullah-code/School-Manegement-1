@@ -188,7 +188,7 @@ const StudentDashboard = () => {
     const subjects = classData?.subjects || [
       { name: 'Mathematics', teacher: 'Mr. Johnson', time: '9:00 AM - 10:30 AM' },
       { name: 'Science', teacher: 'Mrs. Smith', time: '11:00 AM - 12:30 PM' },
-      { name: 'English', teacher: 'Ms. Davis', time: '1:30 PM - 3:00 PM' }
+      { name: 'English', teacher: 'Ms. Davis', time: '1:30 PM - 3:00 PM' }     
     ];
     
     return (

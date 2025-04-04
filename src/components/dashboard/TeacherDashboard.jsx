@@ -198,97 +198,100 @@ const TeacherDashboard = () => {
   };
   
   const renderClassesTab = () => {
-    return (
-      // <div className="content-container">
-      //   {/* <h2 className="text-xl font-semibold mb-6">Your Classes</h2> */}
+    // return (
+    //   // <div className="content-container">
+    //   //   {/* <h2 className="text-xl font-semibold mb-6">Your Classes</h2> */}
         
-      //   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      //     {classes.map((cls) => (
-      //       <div 
-      //         key={cls.id}
-      //         className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
-      //         onClick={() => setSelectedClass(cls)}
-      //       >
-      //         <div className="flex items-center justify-between mb-4">
-      //           <h3 className="text-lg font-medium">{cls.name}</h3>
-      //           <div className="bg-blue-100 p-2 rounded-lg">
-      //             <BookOpen className="h-5 w-5 text-blue-600" />
-      //           </div>
-      //         </div>
-      //         <p className="text-gray-600 mb-4">{cls.description}</p>
-      //         <div className="flex items-center text-sm text-gray-500">
-      //           <Users className="h-4 w-4 mr-1" />
-      //           <span>{cls.studentCount || 0} Students</span>
-      //         </div>
-      //       </div>
-      //     ))}
+    //   //   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    //   //     {classes.map((cls) => (
+    //   //       <div 
+    //   //         key={cls.id}
+    //   //         className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+    //   //         onClick={() => setSelectedClass(cls)}
+    //   //       >
+    //   //         <div className="flex items-center justify-between mb-4">
+    //   //           <h3 className="text-lg font-medium">{cls.name}</h3>
+    //   //           <div className="bg-blue-100 p-2 rounded-lg">
+    //   //             <BookOpen className="h-5 w-5 text-blue-600" />
+    //   //           </div>
+    //   //         </div>
+    //   //         <p className="text-gray-600 mb-4">{cls.description}</p>
+    //   //         <div className="flex items-center text-sm text-gray-500">
+    //   //           <Users className="h-4 w-4 mr-1" />
+    //   //           <span>{cls.studentCount || 0} Students</span>
+    //   //         </div>
+    //   //       </div>
+    //   //     ))}
           
-      //     {classes.length === 0 && (
-      //       // <div className="col-span-full text-center py-8 text-gray-500">
-      //       <div>
-      //         {/* <Calendar className="h-12 w-12 mx-auto mb-3 text-gray-400" />
-      //         <p>No classes assigned yet.</p> */}
-      //       <ComingSoon/>
+    //   //     {classes.length === 0 && (
+    //   //       // <div className="col-span-full text-center py-8 text-gray-500">
+    //   //       <div>
+    //   //         {/* <Calendar className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+    //   //         <p>No classes assigned yet.</p> */}
+    //   //       <ComingSoon/>
 
-      //        </div>
-      //     )}
-      //   </div>
+    //   //        </div>
+    //   //     )}
+    //   //   </div>
         
-      //   {selectedClass && (
-      //     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      //       <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
-      //         <div className="flex justify-between items-center mb-4">
-      //           <h2 className="text-xl font-semibold">{selectedClass.name} Details</h2>
-      //           <button 
-      //             onClick={() => setSelectedClass(null)}
-      //             className="text-gray-500 hover:text-gray-700"
-      //           >
-      //             <XCircle className="h-6 w-6" />
-      //           </button>
-      //         </div>
+    //   //   {selectedClass && (
+    //   //     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    //   //       <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
+    //   //         <div className="flex justify-between items-center mb-4">
+    //   //           <h2 className="text-xl font-semibold">{selectedClass.name} Details</h2>
+    //   //           <button 
+    //   //             onClick={() => setSelectedClass(null)}
+    //   //             className="text-gray-500 hover:text-gray-700"
+    //   //           >
+    //   //             <XCircle className="h-6 w-6" />
+    //   //           </button>
+    //   //         </div>
               
-      //         <div className="mb-4">
-      //           <h3 className="font-medium mb-2">Description</h3>
-      //           <p className="text-gray-600">{selectedClass.description}</p>
-      //         </div>
+    //   //         <div className="mb-4">
+    //   //           <h3 className="font-medium mb-2">Description</h3>
+    //   //           <p className="text-gray-600">{selectedClass.description}</p>
+    //   //         </div>
               
-      //         <div className="mb-4">
-      //           <h3 className="font-medium mb-2">Schedule</h3>
-      //           <p className="text-gray-600">{selectedClass.schedule || 'No schedule set'}</p>
-      //         </div>
+    //   //         <div className="mb-4">
+    //   //           <h3 className="font-medium mb-2">Schedule</h3>
+    //   //           <p className="text-gray-600">{selectedClass.schedule || 'No schedule set'}</p>
+    //   //         </div>
               
-      //         <div>
-      //           <h3 className="font-medium mb-2">Students</h3>
-      //           <div className="max-h-64 overflow-y-auto">
-      //             {students.filter(s => s.classId === selectedClass.id).map(student => (
-      //               <div key={student.id} className="flex items-center justify-between py-2 border-b">
-      //                 <span>{student.name}</span>
-      //                 <div className="flex items-center space-x-2">
-      //                   <span className="text-sm text-gray-500">
-      //                     Attendance: {Object.values(student.attendance || {}).filter(v => v === 'present').length} days
-      //                   </span>
-      //                 </div>
-      //               </div>
-      //             ))}
+    //   //         <div>
+    //   //           <h3 className="font-medium mb-2">Students</h3>
+    //   //           <div className="max-h-64 overflow-y-auto">
+    //   //             {students.filter(s => s.classId === selectedClass.id).map(student => (
+    //   //               <div key={student.id} className="flex items-center justify-between py-2 border-b">
+    //   //                 <span>{student.name}</span>
+    //   //                 <div className="flex items-center space-x-2">
+    //   //                   <span className="text-sm text-gray-500">
+    //   //                     Attendance: {Object.values(student.attendance || {}).filter(v => v === 'present').length} days
+    //   //                   </span>
+    //   //                 </div>
+    //   //               </div>
+    //   //             ))}
                   
-      //             {students.filter(s => s.classId === selectedClass.id).length === 0 && (
-      //               <p className="text-gray-500 text-center py-4">No students in this class</p>
-      //             )}
-      //           </div>
-      //         </div>
+    //   //             {students.filter(s => s.classId === selectedClass.id).length === 0 && (
+    //   //               <p className="text-gray-500 text-center py-4">No students in this class</p>
+    //   //             )}
+    //   //           </div>
+    //   //         </div>
               
-      //         <div className="flex justify-end mt-6">
-      //           <button
-      //             onClick={() => setSelectedClass(null)}
-      //             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-      //           >
-      //             Close
-      //           </button>
-      //         </div>
-      //       </div>
-      //     </div>
-      //   )}
-      // </div>
+    //   //         <div className="flex justify-end mt-6">
+    //   //           <button
+    //   //             onClick={() => setSelectedClass(null)}
+    //   //             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+    //   //           >
+    //   //             Close
+    //   //           </button>
+    //   //         </div>
+    //   //       </div>
+    //   //     </div>
+    //   //   )}
+    //   // </div>
+    //   // <ComingSoon/>
+    // );
+    return(
       <ComingSoon/>
     );
   };
@@ -601,15 +604,15 @@ const TeacherDashboard = () => {
       </div>
     );
   };
-  
-  const renderContent = () => {
+
+  const renderContent = () => { 
     switch (activeTab) {
       case 'classes':
         return renderClassesTab();
       case 'attendance':
         return renderAttendanceTab();
       case 'quizzes':
-        return renderQuizzesTab();
+        return renderQuizzesTab();    
       default:
         return <div>
           {/* <CommingSoon/> */}
@@ -663,7 +666,7 @@ const TeacherDashboard = () => {
         >
           <ClipboardCheck className="h-5 w-5 mr-3" />
           Quizzes
-        </button>
+        </button>     
       </nav>
       
       <div className="absolute bottom-4 left-4 right-4">
