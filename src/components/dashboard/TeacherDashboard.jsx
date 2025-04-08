@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import ComingSoon from './ComingSoon';
 
@@ -708,4 +708,4 @@ const TeacherDashboard = () => {
   );
 };
 
-export default TeacherDashboard;
+export default TeacherDashboard; 

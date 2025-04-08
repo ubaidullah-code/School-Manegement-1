@@ -49,7 +49,7 @@ const AdminDashboard = () => {
 
   const dashboardRef = useRef(null);
   const { user, signOut } = useAuthStore();
-  console.log("quizzes", )
+  console.log("quizzes",classes.length )
   // GSAP animations
   useEffect(() => {
     if (dashboardRef.current) {
@@ -473,9 +473,10 @@ students.forEach(student => {
       setQuizzCheck("")
       let classOne = classCheck.toLocaleUpperCase
       localStorage.setItem("quizz", JSON.stringify({classOne, quizzCheck}))
-      console.log(classCheck, quizzCheck)
+      console.log(classCheck, classes.length)
       setTrueCheck(false);
       setErrors({});
+      
     }
   };
 
