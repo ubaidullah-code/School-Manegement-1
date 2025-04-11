@@ -68,7 +68,7 @@ const TeacherDashboard = () => {
               where('role', '==', 'student'),
               where('class', '==', selectedValue)
             ));
-            console.log("class", selectedValue)
+            // ("class", selectedValue)
             const studentsData = studentsSnapshot.docs.map(doc => ({
               id: doc.id,
               ...doc.data(),
@@ -341,8 +341,8 @@ const TeacherDashboard = () => {
               {students.map((student, index) => {
                 const attendanceStatus = student.attendance?.[today] || 'absent';
                 // const studentClass = student[index]?.class || 'Not assigned';
-          // console.log(studentClass);  
-                console.log(student)
+          // (studentClass);  
+                // (student)
                 
                 return (
                   <tr key={student.id} className="hover:bg-gray-50">

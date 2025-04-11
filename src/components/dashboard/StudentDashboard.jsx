@@ -172,7 +172,7 @@ const StudentDashboard = () => {
       // Update Firestore
       await updateDoc(studentRef, updateData);
   
-      console.log('Quiz results, quiz date, and attempt date updated successfully');
+      // console.log('Quiz results, quiz date, and attempt date updated successfully');
     } catch (error) {
       console.error('Error updating quiz results:', error);
     }
@@ -383,7 +383,7 @@ const StudentDashboard = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             
-            {console.log("stud", studentData.quizzDate)}
+            {("stud", studentData.quizzDate)}
             {quizzes.map((quiz, id) => {
   const isDisabled = studentData?.quizzDate?.includes(quiz?.createdAt);
 
@@ -522,6 +522,7 @@ const StudentDashboard = () => {
     );
   };
   
+ 
   const renderPerformanceTab = () => {
     const { attendancePercentage } = calculateAttendanceStats();
     
@@ -534,12 +535,7 @@ const StudentDashboard = () => {
       { name: 'Geography', score: 75, grade: 'B' }
     ];
     
-    // const quizScores = [
-    //   { name: 'Math Quiz 1', score: 90 },
-    //   { name: 'Science Mid-term', score: 85 },
-    //   { name: 'English Vocabulary', score: 75 },
-    //   { name: 'History Test', score: 82 }
-    // ];
+    
     
     return (
       <div className="content-container">
@@ -549,14 +545,14 @@ const StudentDashboard = () => {
           <div className="bg-white rounded-xl shadow-md p-6">
             <h3 className="text-lg font-medium mb-4">Subject Performance</h3>
             
-            <div className="space-y-4">
+            <div className="space-y-4 check">
               {subjects.map((subject) => (
                 <div key={subject.name}>
                   <div className="flex justify-between items-center mb-1">
                     <span className="text-sm font-medium">{subject.name}</span>
                     <div className="flex items-center">
                       <span className="text-sm font-medium mr-2">{subject.score}%</span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                      <span  className={`px-2 py-1 rounded-full text-xs font-semibold  ${
                         subject.grade.startsWith('A') 
                           ? 'bg-green-100 text-green-800' 
                           : subject.grade.startsWith('B')
@@ -590,7 +586,7 @@ const StudentDashboard = () => {
             <h3 className="text-lg font-medium mb-4">Recent Quiz Results</h3>
             
             <div className="space-y-4">
-              {console.log("quizzResults", studentData.quizResults)}
+              {("quizzResults", studentData.quizResults)}
               {studentData?.quizResults?.map((quiz) => (
                 <div key={quiz.quizzName} className="flex items-center p-3 border rounded-md">
                   <div className="bg-purple-100 p-2 rounded-lg mr-4">

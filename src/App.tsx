@@ -34,7 +34,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/auth" element={!user ? <AuthForm /> : <Navigate to="/dashboard" />} />
-        <Route path='/' element={<Hero/>}/>
+        <Route path='/' element={<AuthForm/>}/>
         <Route 
           path="/dashboard" 
           element={

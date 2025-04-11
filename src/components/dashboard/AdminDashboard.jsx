@@ -49,7 +49,7 @@ const AdminDashboard = () => {
 
   const dashboardRef = useRef(null);
   const { user, signOut } = useAuthStore();
-  console.log("quizzes",classes.length )
+  // console.log("quizzes",classes.length )
   // GSAP animations
   useEffect(() => {
     if (dashboardRef.current) {
@@ -445,7 +445,7 @@ students.forEach(student => {
     ],
 };
   
-  
+  console.log("countMap", countMap)
 
   const [errors, setErrors] = useState({});
   const [trueCheck, setTrueCheck] = useState(true);
